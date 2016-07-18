@@ -3,6 +3,7 @@ const MAX_TILE = 2048;
 var CLASSES_TILE = [];
 var CLASSES_POS = [];
 var score = 0;
+var gameStop = false;
 
 var value = 2;
 var i = 1;
@@ -61,13 +62,13 @@ function cellUpdate(name, color, size, i, j, value) {
 function startTiles() {
 	var i1 = Math.floor(Math.random() * SIZE_FIELD);
 	var j1 = Math.floor(Math.random() * SIZE_FIELD);
-	var value = (Math.random() <= 0.5) ? 2 : 4;
+	var value = (Math.random() <= 0.5) ? 1024 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i1, j1, value);
 	do {
 	var i2 = Math.floor(Math.random() * SIZE_FIELD);
 	var j2 = Math.floor(Math.random() * SIZE_FIELD);
 	} while ((i1 == i2) && (j1 == j2));
-	var value = (Math.random() <= 0.5) ? 2 : 4;
+	var value = (Math.random() <= 0.5) ? 1024 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i2, j2, value);
 }
 
@@ -107,13 +108,13 @@ function getColor(value){
 function getSize(value) {
 	switch (value) {
 		case 0: case 2: case 4: case 8: 
-			return "70px";
+			return "55px";
 		case 16: case 32: case 64: 
-			return "65px";
-		case 128: case 256: case 512:
-				return "60px";
-		default: 
 			return "50px";
+		case 128: case 256: case 512:
+				return "40px";
+		default: 
+			return "30px";
 	}
 }
 
@@ -132,6 +133,7 @@ function newGame() {
 	removeAllClasses();
 	score = 0;
 	document.querySelector("#score-info").innerHTML = score;
+	document.querySelector("#msg-info").innerHTML = "";
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
 			matrix[i][j] = new Cell(getName(0), getColor(0), getSize(0), 0);
@@ -216,7 +218,7 @@ function moveLeft() {
 	while (k < SIZE_FIELD) {
 		for (var j = 0; j < SIZE_FIELD - 1; j++) {
 			if (matrix[k][j].value == matrix[k][j + 1].value) {
-				score += matrix[k][j].value = matrix[k][j].value * 2;
+				score += matrix[k][j].value *= 2;
 				matrix[k][j + 1].value = 0;
 			}
 		}
@@ -231,7 +233,7 @@ function moveUp() {
 	while (k < SIZE_FIELD) {
 		for (var j = 0; j < SIZE_FIELD - 1; j++) {
 			if (matrix[j][k].value == matrix[j + 1][k].value) {
-				score +=  matrix[j + 1][k].value = matrix[j + 1][k].value * 2;
+				score +=  matrix[j + 1][k].value *= 2;
 				matrix[j][k].value = 0;
 			}
 		}
@@ -246,7 +248,7 @@ function moveRight() {
 	while (k < SIZE_FIELD) {
 		for (var j = SIZE_FIELD - 1; j >= 1; j--) {
 			if (matrix[k][j].value == matrix[k][j - 1].value) {
-				score += matrix[k][j].value = matrix[k][j].value * 2;
+				score += matrix[k][j].value *= 2;
 				matrix[k][j - 1].value = 0;
 			}
 		}
@@ -261,7 +263,7 @@ function moveDown() {
 	while (k < SIZE_FIELD) {
 		for (var j = SIZE_FIELD - 1; j >= 1; j--) {
 			if (matrix[j][k].value == matrix[j - 1][k].value) {
-				score += matrix[j][k].value = matrix[j][k].value * 2;
+				score += matrix[j][k].value *= 2;
 				matrix[j - 1][k].value = 0;
 			}
 		}
@@ -270,7 +272,44 @@ function moveDown() {
 	sortDown();
 }
 
+function isLose() {
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD; j++) {
+			if (!matrix[i][j].value) return false;
+		}
+	}
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD - 1; j++) {
+			if ((matrix[i][j].value == matrix[i][j + 1].value) ||
+			 	(matrix[j][i].value == matrix[j + 1][i]).value) return false;
+		}
+	}
+	return true;
+}
+
+function isWin() {
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD; j++) {
+			if (matrix[i][j].value == MAX_TILE) return true;
+		}
+	}
+	return false;
+}
+
+function Stop(msg, color) {
+	gameStop = true;
+	document.querySelector("#msg").style.display = "block";
+	document.querySelector("#msg-info").style.background = color;
+	document.querySelector("#msg-info").innerHTML = msg;
+	setTimeout(function () {
+		gameStop = false;
+		document.querySelector("#msg").style.display = "";
+		newGame();
+	}, 2000);
+}
+
 document.onkeydown = function(e) {
+	if (!gameStop) {
 	step = false;
 	var clone = [SIZE_FIELD];
 	for (var i = 0; i < SIZE_FIELD; i++) {
@@ -308,7 +347,10 @@ document.onkeydown = function(e) {
 		}
 		if (step) break;
 	}
-	if (step) newTile();
+	if (step) newTile();	
+	if (isWin()) Stop("ВЫ ВЫЙГРАЛИ", "#3fff00");
+	if (isLose()) Stop("ВЫ ПРОИГРАЛИ", "#99badd");
+	}
 }
 
 
