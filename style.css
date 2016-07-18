@@ -1,0 +1,32 @@
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+body {
+	font-family: Arial;
+	font-weight: bold;
+	color: #776e65;
+	font-size: 60px;
+}
+
+#game {
+	min-width: 700px;
+	padding: 10px;
+	margin: 30px auto;
+}
+
+#game-field {
+	border-collapse: collapse;
+	margin: 0px auto;
+	border: 15px solid #bbada0;
+	border-radius: 15px;
+}
+
+.cell {
+	width: 120px;
+	height: 120px;
+	background: #cdc1b4;
+	border: 15px solid #bbada0;
+	text-align: center;
+}
