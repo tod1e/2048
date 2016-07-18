@@ -6,8 +6,8 @@
 body {
 	font-family: Arial;
 	font-weight: bold;
-	color: #776e65;
-	font-size: 60px;
+	color: #3c3d3e;
+	font-size: 40px;
 }
 
 #game {
@@ -29,4 +29,12 @@ body {
 	background: #cdc1b4;
 	border: 15px solid #bbada0;
 	text-align: center;
+}
+
+#score {
+	text-align: center;
+}
+
+#score-info {
+	color: #000;
 }

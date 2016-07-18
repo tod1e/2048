@@ -82,7 +82,7 @@ function getColor(value){
 		case 2: 
 			return "#eee4da";
 		case 4: 
-			return "#eee4da";
+			return "#ede0c8";
 		case 8: 
 			return "#f2b179";
 		case 16: 
@@ -122,13 +122,16 @@ function newTile(value) {
 	var i = Math.floor(Math.random() * SIZE_FIELD);
 	var j = Math.floor(Math.random() * SIZE_FIELD);
 	var value = (Math.random() <= 0.5) ? 2 : 4;
-	} while (matrix[i][j]);
+	} while (matrix[i][j].value);
 	cellUpdate(getName(value), getColor(value), getSize(value), i, j, value);
+	setValueAndSize(i, j, matrix[i][j]);
+	setColor(i, j, matrix[i][j].color);
 }
 
 function newGame() {
 	removeAllClasses();
 	score = 0;
+	document.querySelector("#score-info").innerHTML = score;
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
 			matrix[i][j] = new Cell(getName(0), getColor(0), getSize(0), 0);
@@ -142,11 +145,6 @@ function newGame() {
 		}	
 	}
 }
-
-function Update() {
-
-}
-
 
 function sortLeft() { 
 	var k = 0; 
@@ -218,7 +216,7 @@ function moveLeft() {
 	while (k < SIZE_FIELD) {
 		for (var j = 0; j < SIZE_FIELD - 1; j++) {
 			if (matrix[k][j].value == matrix[k][j + 1].value) {
-				matrix[k][j].value = matrix[k][j].value * 2;
+				score += matrix[k][j].value = matrix[k][j].value * 2;
 				matrix[k][j + 1].value = 0;
 			}
 		}
@@ -233,7 +231,7 @@ function moveUp() {
 	while (k < SIZE_FIELD) {
 		for (var j = 0; j < SIZE_FIELD - 1; j++) {
 			if (matrix[j][k].value == matrix[j + 1][k].value) {
-				matrix[j + 1][k].value = matrix[j + 1][k].value * 2;
+				score +=  matrix[j + 1][k].value = matrix[j + 1][k].value * 2;
 				matrix[j][k].value = 0;
 			}
 		}
@@ -248,7 +246,7 @@ function moveRight() {
 	while (k < SIZE_FIELD) {
 		for (var j = SIZE_FIELD - 1; j >= 1; j--) {
 			if (matrix[k][j].value == matrix[k][j - 1].value) {
-				matrix[k][j].value = matrix[k][j].value * 2;
+				score += matrix[k][j].value = matrix[k][j].value * 2;
 				matrix[k][j - 1].value = 0;
 			}
 		}
@@ -263,7 +261,7 @@ function moveDown() {
 	while (k < SIZE_FIELD) {
 		for (var j = SIZE_FIELD - 1; j >= 1; j--) {
 			if (matrix[j][k].value == matrix[j - 1][k].value) {
-				matrix[j][k].value = matrix[j][k].value * 2;
+				score += matrix[j][k].value = matrix[j][k].value * 2;
 				matrix[j - 1][k].value = 0;
 			}
 		}
@@ -273,6 +271,16 @@ function moveDown() {
 }
 
 document.onkeydown = function(e) {
+	step = false;
+	var clone = [SIZE_FIELD];
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		clone[i] = [SIZE_FIELD];
+	}
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD; j++) {
+			clone[i][j] = matrix[i][j].value;
+		}
+	}
 	switch (e.keyCode) {
 		case 37: moveLeft();
 		break;
@@ -283,7 +291,6 @@ document.onkeydown = function(e) {
 		case 40: moveDown();
 		break;
 	}
-	console.log(matrix);
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
 			cellUpdate(getName(matrix[i][j].value), getColor(matrix[i][j].value), getSize(matrix[i][j].value), i, j, matrix[i][j].value);
@@ -291,6 +298,17 @@ document.onkeydown = function(e) {
 			setColor(i, j, matrix[i][j].color);
 		}	
 	}
+	document.querySelector("#score-info").innerHTML = score;
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD; j++) {
+			if (clone[i][j] != matrix[i][j].value) {
+				step = true;
+				break;
+			}
+		}
+		if (step) break;
+	}
+	if (step) newTile();
 }
 
 
