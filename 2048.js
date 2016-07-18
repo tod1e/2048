@@ -46,7 +46,7 @@ function setColor(i, j, str) {
 function setValueAndSize(i, j) {
 	// УСТАНОВИМ РАЗМЕР ТЕКСТА
 	document.querySelector("." + CLASSES_POS[i  * SIZE_FIELD + j]).style.fontSize = matrix[i][j].size;
-	// УТСАНОВИМ ЗНАЧЕНИЕ В ЯЧЕЙКУ
+	// УСТАНОВИМ ЗНАЧЕНИЕ В ЯЧЕЙКУ
 	if (matrix[i][j].value) document.querySelector("." + CLASSES_POS[i  * SIZE_FIELD + j]).innerHTML = matrix[i][j].value;
 }
 
