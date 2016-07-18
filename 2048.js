@@ -24,7 +24,6 @@ while (k < SIZE_FIELD * SIZE_FIELD) {
 	k++;
 }
 
-// КОНСТРУКТОР: КЛЕТКА
 function Cell(name, color, size, value) {
 	this.value = value;	
 	this.name = name;
@@ -32,21 +31,17 @@ function Cell(name, color, size, value) {
 	this.size = size;
 }
 
-// ИГРОВАЯ МАТРИЦА
 var matrix = [SIZE_FIELD];
 for (var i = 0; i < SIZE_FIELD; i++) {
 	matrix[i] = [SIZE_FIELD];
 }
 
-// ЦВЕТ КАЖДОЙ КЛЕТКИ
 function setColor(i, j, str) {
 	document.querySelector("." + CLASSES_POS[i  * SIZE_FIELD + j]).style.background = str;
 }
 
 function setValueAndSize(i, j) {
-	// УСТАНОВИМ РАЗМЕР ТЕКСТА
 	document.querySelector("." + CLASSES_POS[i  * SIZE_FIELD + j]).style.fontSize = matrix[i][j].size;
-	// УСТАНОВИМ ЗНАЧЕНИЕ В ЯЧЕЙКУ
 	if (matrix[i][j].value) document.querySelector("." + CLASSES_POS[i  * SIZE_FIELD + j]).innerHTML = matrix[i][j].value;
 }
 
@@ -76,12 +71,10 @@ function startTiles() {
 	cellUpdate(getName(value), getColor(value), getSize(value), i2, j2, value);
 }
 
-// ПОЛУЧАЕМ ИМЯ ДЛЯ КЛАССА
 function getName(value) { 
 	return (value != 0) ? "cell-" + value : "cell";
 }
 
-// ПОЛУЧАЕМ ЦВЕТ ДЛЯ ПЛИТКИ
 function getColor(value){
 	switch (value) {
 		case 0:
@@ -123,7 +116,6 @@ function getColor(value){
 	}
 }
 
-// ПОЛУЧАЕМ РАЗМЕР ДЛЯ ТЕКСТА НА ПЛИТКЕ
 function getSize(value) {
 	switch (value) {
 		case 0: case 2: case 4: case 8: 
@@ -137,25 +129,20 @@ function getSize(value) {
 	}
 }
 
-// НОВАЯ ПЛИТКА
 function newTile(value) {
 
 }
 
-// НОВАЯ ИГРА
 function newGame() {
-	removeAllClasses(); // УДАЛЯЕМ ЛИШНИЕ КЛАССЫ НА КЛЕТКАХ
+	removeAllClasses();
 	score = 0;
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
-			//СОЗДАЕМ ЭКЗ ОБЪЕКТА КАЖДОЙ КЛЕТКИ
 			matrix[i][j] = new Cell(getName(0), getColor(0), getSize(0), 0);
-			// УСТАНАВЛИВАЕМ ЦВЕТ КАЖДОЙ КЛЕТКИ
 			setColor(i, j, matrix[i][j].color);
 		}
 	}
-	startTiles(); // СОЗДАЕМ 2 НАЧАЛЬНЫЕ ПЛИТКИ
-	// ПРИРОСКА НА ПОЛЕ
+	startTiles();
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
 			setValueAndSize(i, j, matrix[i][j]);
@@ -165,10 +152,9 @@ function newGame() {
 }
 
 function Update() {
-
+	
 }
 
-// НАЧИНАЕМ ИГРУ
 newGame();
 
 
