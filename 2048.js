@@ -13,7 +13,7 @@ while (value <= MAX_TILE) {
 	i++;
 }
 
-var k = 0, i = 1, j = 1;
+var k = 0, i = j = 1;
 while (k < SIZE_FIELD * SIZE_FIELD) {
 	CLASSES_POS[k] = "cell-" + i + "-" + j;
 	j++;
@@ -152,7 +152,7 @@ function newGame() {
 }
 
 function Update() {
-	
+
 }
 
 newGame();
