@@ -62,13 +62,13 @@ function cellUpdate(name, color, size, i, j, value) {
 function startTiles() {
 	var i1 = Math.floor(Math.random() * SIZE_FIELD);
 	var j1 = Math.floor(Math.random() * SIZE_FIELD);
-	var value = (Math.random() <= 0.5) ? 1024 : 4;
+	var value = (Math.random() <= 0.5) ? 2 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i1, j1, value);
 	do {
 	var i2 = Math.floor(Math.random() * SIZE_FIELD);
 	var j2 = Math.floor(Math.random() * SIZE_FIELD);
 	} while ((i1 == i2) && (j1 == j2));
-	var value = (Math.random() <= 0.5) ? 1024 : 4;
+	var value = (Math.random() <= 0.5) ? 2 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i2, j2, value);
 }
 
