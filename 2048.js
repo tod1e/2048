@@ -6,6 +6,11 @@ var score = 0;
 var bestScore = 0;
 var gameStop = false;
 
+var matrix = [SIZE_FIELD];
+for (var i = 0; i < SIZE_FIELD; i++) {
+	matrix[i] = [SIZE_FIELD];
+}
+
 var value = 2;
 var i = 1;
 CLASSES_TILE[0] = "cell";
@@ -26,16 +31,19 @@ while (k < SIZE_FIELD * SIZE_FIELD) {
 	k++;
 }
 
+function Create() {
+	for (var i = 0; i < SIZE_FIELD; i++) {
+		for (var j = 0; j < SIZE_FIELD; j++) {
+			matrix[i][j] = new Cell(getName(0), getColor(0), getSize(0), 0);
+		}
+	}
+}
+
 function Cell(name, color, size, value) {
 	this.value = value;	
 	this.name = name;
 	this.color = color;
 	this.size = size;
-}
-
-var matrix = [SIZE_FIELD];
-for (var i = 0; i < SIZE_FIELD; i++) {
-	matrix[i] = [SIZE_FIELD];
 }
 
 function setColor(i, j, str) {
@@ -61,16 +69,16 @@ function cellUpdate(name, color, size, i, j, value) {
 }
 
 function startTiles() {
-	var i1 = Math.floor(Math.random() * SIZE_FIELD);
-	var j1 = Math.floor(Math.random() * SIZE_FIELD);
+	var i = Math.floor(Math.random() * SIZE_FIELD);
+	var j = Math.floor(Math.random() * SIZE_FIELD);
 	var value = (Math.random() <= 0.5) ? 2 : 4;
-	cellUpdate(getName(value), getColor(value), getSize(value), i1, j1, value);
+	cellUpdate(getName(value), getColor(value), getSize(value), i, j, value);
 	do {
-		var i2 = Math.floor(Math.random() * SIZE_FIELD);
-		var j2 = Math.floor(Math.random() * SIZE_FIELD);
-	} while ((i1 == i2) && (j1 == j2));
-	var value = (Math.random() <= 0.5) ? 2 : 4;
-	cellUpdate(getName(value), getColor(value), getSize(value), i2, j2, value);
+		i = Math.floor(Math.random() * SIZE_FIELD);
+		j = Math.floor(Math.random() * SIZE_FIELD);
+	} while (matrix[i][j].value);
+	value = (Math.random() <= 0.5) ? 2 : 4;
+	cellUpdate(getName(value), getColor(value), getSize(value), i, j, value);
 }
 
 function getName(value) { 
@@ -113,17 +121,18 @@ function getSize(value) {
 		case 16: case 32: case 64: 
 			return "50px";
 		case 128: case 256: case 512:
-				return "40px";
+			return "40px";
 		default: 
 			return "30px";
 	}
 }
 
 function newTile(value) {
+	var i, j, value;
 	do {
-	var i = Math.floor(Math.random() * SIZE_FIELD);
-	var j = Math.floor(Math.random() * SIZE_FIELD);
-	var value = (Math.random() <= 0.5) ? 2 : 4;
+		i = Math.floor(Math.random() * SIZE_FIELD);
+		j = Math.floor(Math.random() * SIZE_FIELD);
+		value = (Math.random() <= 0.5) ? 2 : 4;
 	} while (matrix[i][j].value);
 	cellUpdate(getName(value), getColor(value), getSize(value), i, j, value);
 	setValueAndSize(i, j, matrix[i][j]);
@@ -138,7 +147,7 @@ function newGame() {
 	document.querySelector("#msg-info").innerHTML = "";
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
-			matrix[i][j] = new Cell(getName(0), getColor(0), getSize(0), 0);
+			cellUpdate(getName(0), getColor(0), getSize(0), i, j, 0)
 		}
 	}
 	startTiles();
@@ -356,7 +365,7 @@ document.onkeydown = function(e) {
 	}
 }
 
-
+Create();
 newGame();
 
 
