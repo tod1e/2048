@@ -281,7 +281,7 @@ function isLose() {
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD - 1; j++) {
 			if ((matrix[i][j].value == matrix[i][j + 1].value) ||
-			 	(matrix[j][i].value == matrix[j + 1][i]).value) return false;
+			 	(matrix[j][i].value == matrix[j + 1][i].value)) return false;
 		}
 	}
 	return true;
