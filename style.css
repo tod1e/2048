@@ -35,13 +35,22 @@ body {
 	margin: 20px 0px;
 }
 
+#panel {
+	margin: 0px auto;
+	width: 800px;
+}
+
+#panel tr td {
+	width: 400px;
+}
+
 #msg {
 	display: none;
 }
 
-#score-info, #msg-info {
+#best-score-info, #score-info, #msg-info {
 	background: orange;
 	padding: 10px;
 	border-radius: 5px;
-	color: #000;
+	color: #000000;
 }

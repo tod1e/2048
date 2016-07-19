@@ -3,6 +3,7 @@ const MAX_TILE = 2048;
 var CLASSES_TILE = [];
 var CLASSES_POS = [];
 var score = 0;
+var bestScore = 0;
 var gameStop = false;
 
 var value = 2;
@@ -65,8 +66,8 @@ function startTiles() {
 	var value = (Math.random() <= 0.5) ? 2 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i1, j1, value);
 	do {
-	var i2 = Math.floor(Math.random() * SIZE_FIELD);
-	var j2 = Math.floor(Math.random() * SIZE_FIELD);
+		var i2 = Math.floor(Math.random() * SIZE_FIELD);
+		var j2 = Math.floor(Math.random() * SIZE_FIELD);
 	} while ((i1 == i2) && (j1 == j2));
 	var value = (Math.random() <= 0.5) ? 2 : 4;
 	cellUpdate(getName(value), getColor(value), getSize(value), i2, j2, value);
@@ -99,7 +100,7 @@ function getColor(value){
 		case 512: 
 			return "#edc850";
 		case 1024: 
-			return "#edc850";
+			return "#eecd61";
 		case 2048:
 			return "#edc22e";
 	}
@@ -133,6 +134,7 @@ function newGame() {
 	removeAllClasses();
 	score = 0;
 	document.querySelector("#score-info").innerHTML = score;
+	document.querySelector("#best-score-info").innerHTML = bestScore;
 	document.querySelector("#msg-info").innerHTML = "";
 	for (var i = 0; i < SIZE_FIELD; i++) {
 		for (var j = 0; j < SIZE_FIELD; j++) {
@@ -303,6 +305,7 @@ function Stop(msg, color) {
 	document.querySelector("#msg-info").innerHTML = msg;
 	setTimeout(function () {
 		gameStop = false;
+		if (bestScore < score) bestScore = score;
 		document.querySelector("#msg").style.display = "";
 		newGame();
 	}, 2000);
@@ -310,46 +313,46 @@ function Stop(msg, color) {
 
 document.onkeydown = function(e) {
 	if (!gameStop) {
-	step = false;
-	var clone = [SIZE_FIELD];
-	for (var i = 0; i < SIZE_FIELD; i++) {
-		clone[i] = [SIZE_FIELD];
-	}
-	for (var i = 0; i < SIZE_FIELD; i++) {
-		for (var j = 0; j < SIZE_FIELD; j++) {
-			clone[i][j] = matrix[i][j].value;
+		step = false;
+		var clone = [SIZE_FIELD];
+		for (var i = 0; i < SIZE_FIELD; i++) {
+			clone[i] = [SIZE_FIELD];
 		}
-	}
-	switch (e.keyCode) {
-		case 37: moveLeft();
-		break;
-		case 38: moveUp();
-		break;
-		case 39: moveRight();
-		break;
-		case 40: moveDown();
-		break;
-	}
-	for (var i = 0; i < SIZE_FIELD; i++) {
-		for (var j = 0; j < SIZE_FIELD; j++) {
-			cellUpdate(getName(matrix[i][j].value), getColor(matrix[i][j].value), getSize(matrix[i][j].value), i, j, matrix[i][j].value);
-			setValueAndSize(i, j, matrix[i][j]);
-			setColor(i, j, matrix[i][j].color);
-		}	
-	}
-	document.querySelector("#score-info").innerHTML = score;
-	for (var i = 0; i < SIZE_FIELD; i++) {
-		for (var j = 0; j < SIZE_FIELD; j++) {
-			if (clone[i][j] != matrix[i][j].value) {
-				step = true;
-				break;
+		for (var i = 0; i < SIZE_FIELD; i++) {
+			for (var j = 0; j < SIZE_FIELD; j++) {
+				clone[i][j] = matrix[i][j].value;
 			}
 		}
-		if (step) break;
-	}
-	if (step) newTile();	
-	if (isWin()) Stop("ВЫ ВЫЙГРАЛИ", "#3fff00");
-	if (isLose()) Stop("ВЫ ПРОИГРАЛИ", "#99badd");
+		switch (e.keyCode) {
+			case 37: moveLeft();
+			break;
+			case 38: moveUp();
+			break;
+			case 39: moveRight();
+			break;
+			case 40: moveDown();
+			break;
+		}
+		for (var i = 0; i < SIZE_FIELD; i++) {
+			for (var j = 0; j < SIZE_FIELD; j++) {
+				cellUpdate(getName(matrix[i][j].value), getColor(matrix[i][j].value), getSize(matrix[i][j].value), i, j, matrix[i][j].value);
+				setValueAndSize(i, j, matrix[i][j]);
+				setColor(i, j, matrix[i][j].color);
+			}	
+		}
+		document.querySelector("#score-info").innerHTML = score;
+		for (var i = 0; i < SIZE_FIELD; i++) {
+			for (var j = 0; j < SIZE_FIELD; j++) {
+				if (clone[i][j] != matrix[i][j].value) {
+					step = true;
+					break;
+				}
+			}
+			if (step) break;
+		}
+		if (step) newTile();	
+		if (isWin()) Stop("ВЫ ВЫЙГРАЛИ", "#3fff00");
+		if (isLose()) Stop("ВЫ ПРОИГРАЛИ", "#99badd");
 	}
 }
 
