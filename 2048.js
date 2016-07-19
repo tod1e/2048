@@ -3,6 +3,7 @@ const MAX_TILE = 2048;
 var CLASSES_TILE = [];
 var CLASSES_POS = [];
 var score = 0;
+izmeny svou jizn
 var bestScore = 0;
 var gameStop = false;
 
